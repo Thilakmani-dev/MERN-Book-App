@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { getBooks, editBook, addBook } = require('../controllers/books');
 
-router.route('/').get(getBooks);
+router.route('/get').get(getBooks);
 
 router.route('/edit').post(editBook);
 

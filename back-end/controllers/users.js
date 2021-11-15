@@ -22,8 +22,7 @@ const registerUser = async (req, res) => {
     if (err) res.send(err);
 
     res.json({
-      message: 'User created!',
-      data: obj,
+      ...obj,
       token: generateToken(obj._id),
     });
   });

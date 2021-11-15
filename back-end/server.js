@@ -21,7 +21,7 @@ const userRouter = require('./routes/users');
 const bookRouter = require('./routes/books');
 
 app.use('/users', userRouter);
-app.use('/employees', bookRouter);
+app.use('/books', bookRouter);
 app.use(notFound);
 app.use(errorHandler);
 
