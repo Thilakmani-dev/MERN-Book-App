@@ -29,7 +29,7 @@ const LoginScreen = (props) => {
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
-        // localStorage.setItem('userInfo', JSON.stringify(res));
+        localStorage.setItem('userInfo', JSON.stringify(res));
       })
       .catch((err) => seterror(err));
     setloading(false);

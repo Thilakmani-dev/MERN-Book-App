@@ -13,7 +13,7 @@ function App() {
         <Route path='/' element={<LandingPage />} exact />
         <Route path='/login' element={<LoginScreen />} exact />
         <Route path='/register' element={<RegisterScreen />} exact />
-        <Route path='/mybooks' element={() => <MyBooks />} exact />
+        <Route path='/mybooks' element={<MyBooks />} exact />
       </Routes>
     </BrowserRouter>
   );

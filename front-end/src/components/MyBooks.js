@@ -9,17 +9,22 @@ import {
   Col,
   Table,
 } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const MyBooks = () => {
+  const navigate = useNavigate();
+
   function getUser() {
-    const userInfo = localStorage.getItem('userInfo');
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     console.log(userInfo);
+    return userInfo.user.fullName;
   }
   function handleLogout() {
     localStorage.removeItem('userInfo');
+    navigate('/login');
   }
   useEffect(() => {
-    fetch('http://localhost:5000/books')
+    fetch('http://localhost:5000/books/get')
       .then((res) => res.json())
       .then((res) => setbooks(res))
       .catch((err) => console.log('error while getting books', err));
@@ -62,7 +67,10 @@ const MyBooks = () => {
       },
       body: JSON.stringify(editedBook),
     })
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res);
+        alert('deleted successfully');
+      })
       .catch((err) => console.log(err));
   };
   const editHandler = (id) => {};
@@ -72,7 +80,7 @@ const MyBooks = () => {
         <Navbar.Brand href='#home'>MY BOOKS</Navbar.Brand>
         <Nav>
           <NavDropdown title='Profile' id='basic-nav-dropdown'>
-            <NavDropdown.Item>{getUser()}</NavDropdown.Item>
+            <NavDropdown.Item>{getUser().toUpperCase()}</NavDropdown.Item>
             <NavDropdown.Item>
               <Button onClick={handleLogout}>Logout</Button>
             </NavDropdown.Item>
@@ -133,6 +141,13 @@ const MyBooks = () => {
               />
             </Col>
           </Row>
+          <Row className='m-1 p-1'>
+            <Col sm={4} className='mx-auto'>
+              <Button variant='light' type='submit'>
+                Add Book
+              </Button>
+            </Col>
+          </Row>
         </form>
       </Container>
       <Row>
@@ -140,11 +155,9 @@ const MyBooks = () => {
           <Table striped bordered hover>
             <thead>
               <tr>
-                <th>EMPLOYEE ID</th>
-                <th>FIRST NAME</th>
-                <th>LAST NAME</th>
-                <th>MOBILE</th>
-                <th>CITY</th>
+                <th>BOOK ID</th>
+                <th>BOOK TITLE</th>
+                <th>BOOK DESCRIPTION</th>
                 <th>EDIT</th>
                 <th>DELETE</th>
               </tr>
@@ -152,18 +165,16 @@ const MyBooks = () => {
             <tbody>
               {books.length > 0
                 ? books
-                    .filter((employee) => employee.deleted === false)
-                    .map((employee) => (
-                      <tr key={employee.empId}>
-                        <td>{employee.empId}</td>
-                        <td>{employee.firstname}</td>
-                        <td>{employee.lastname}</td>
-                        <td>{employee.mobile}</td>
-                        <td>{employee.city}</td>
+                    .filter((book) => book.deleted === false)
+                    .map((book) => (
+                      <tr key={book.bookId}>
+                        <td>{book.bookId}</td>
+                        <td>{book.bookTitle}</td>
+                        <td>{book.bookDescription}</td>
                         <td>
                           <Button
                             variant='primary'
-                            onClick={() => editHandler(employee._id)}
+                            onClick={() => editHandler(book._id)}
                           >
                             Edit
                           </Button>
@@ -171,7 +182,7 @@ const MyBooks = () => {
                         <td>
                           <Button
                             variant='danger'
-                            onClick={() => deleteHandler(employee)}
+                            onClick={() => deleteHandler(book)}
                           >
                             Delete
                           </Button>
